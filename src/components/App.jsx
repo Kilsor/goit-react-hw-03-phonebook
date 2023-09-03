@@ -15,6 +15,21 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    // Завантаження контактів з локального сховища при першому відкритті застосунку
+    const savedContacts = localStorage.getItem('contacts');
+    if (savedContacts !== null) {
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Збереження контактів в локальному сховищі при зміні стану contacts
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleAddContact = (name, number) => {
     const isDuplicateName = this.state.contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
